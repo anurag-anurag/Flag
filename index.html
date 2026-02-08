@@ -1,29 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Redux Learning App</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://unpkg.com" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <p class="eyebrow">React + Redux Practice</p>
+        <h1>Simple Redux Learning Project</h1>
+        <p class="subtitle">
+          Ek simple counter aur todo list jisse tum Redux flow samajh sakte ho: action → reducer →
+          store → UI.
+        </p>
+      </header>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flag</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon"
-        href="kisspng-patna-ashoka-chakra-dharma-religion-flag-wikipedia-page-cliparts-5a886ae1d92990.4183694815188896978895.png">
-</head>
+      <main id="root"></main>
 
-
-<body>
-    <div class="flag">
-        <div class="saffron color"></div>
-        <div class="white color">
-            <img src="kisspng-patna-ashoka-chakra-dharma-religion-flag-wikipedia-page-cliparts-5a886ae1d92990.4183694815188896978895.png"
-                alt="ashok" class="ashok">
-        </div>
-        <div class="green color"></div>
-       
+      <footer class="footer">
+        <p>
+          Tip: Button click = dispatch. State update reducer me hota hai. React-Redux UI ko auto
+          update karta hai.
+        </p>
+      </footer>
     </div>
-    <img src="pngegg.png" alt="" class="text">
 
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/redux@4.2.1/dist/redux.js" crossorigin></script>
+    <script src="https://unpkg.com/react-redux@8.1.3/dist/react-redux.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js" crossorigin></script>
 
-</body>
+    <script type="text/babel">
+      const { createStore, combineReducers } = Redux;
+      const { Provider, useDispatch, useSelector } = ReactRedux;
 
+      const initialCounterState = {
+        value: 0,
+      };
+
+      const counterReducer = (state = initialCounterState, action) => {
+        switch (action.type) {
+          case "counter/increment":
+            return { value: state.value + 1 };
+          case "counter/decrement":
+            return { value: state.value - 1 };
+          case "counter/reset":
+            return { value: 0 };
+          default:
+            return state;
+        }
+      };
+
+      const initialTodoState = {
+        items: [
+          { id: 1, text: "Redux store create karna", done: true },
+          { id: 2, text: "Action dispatch karna", done: false },
+          { id: 3, text: "Reducer update samajhna", done: false },
+        ],
+      };
+
+      const todoReducer = (state = initialTodoState, action) => {
+        switch (action.type) {
+          case "todo/add":
+            return {
+              items: [
+                ...state.items,
+                { id: Date.now(), text: action.payload, done: false },
+              ],
+            };
+          case "todo/toggle":
+            return {
+              items: state.items.map((item) =>
+                item.id === action.payload
+                  ? { ...item, done: !item.done }
+                  : item
+              ),
+            };
+          default:
+            return state;
+        }
+      };
+
+      const rootReducer = combineReducers({
+        counter: counterReducer,
+        todos: todoReducer,
+      });
+
+      const store = createStore(rootReducer);
+
+      const CounterCard = () => {
+        const dispatch = useDispatch();
+        const value = useSelector((state) => state.counter.value);
+
+        return (
+          <section className="card">
+            <h2>Counter</h2>
+            <p className="card-description">
+              Redux state ka simple example. + ya - button se state update hota hai.
+            </p>
+            <div className="counter-value">{value}</div>
+            <div className="button-row">
+              <button onClick={() => dispatch({ type: "counter/decrement" })}>
+                -1
+              </button>
+              <button onClick={() => dispatch({ type: "counter/increment" })}>
+                +1
+              </button>
+              <button
+                className="ghost"
+                onClick={() => dispatch({ type: "counter/reset" })}
+              >
+                Reset
+              </button>
+            </div>
+          </section>
+        );
+      };
+
+      const TodoCard = () => {
+        const dispatch = useDispatch();
+        const todos = useSelector((state) => state.todos.items);
+        const [text, setText] = React.useState("");
+
+        const handleSubmit = (event) => {
+          event.preventDefault();
+          if (!text.trim()) {
+            return;
+          }
+          dispatch({ type: "todo/add", payload: text.trim() });
+          setText("");
+        };
+
+        return (
+          <section className="card">
+            <h2>Todo List</h2>
+            <p className="card-description">
+              Form submit = action dispatch. Checkbox toggle = reducer update.
+            </p>
+
+            <form className="todo-form" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Naya task likho..."
+                value={text}
+                onChange={(event) => setText(event.target.value)}
+              />
+              <button type="submit">Add</button>
+            </form>
+
+            <ul className="todo-list">
+              {todos.map((todo) => (
+                <li key={todo.id}>
+                  <label className={todo.done ? "done" : ""}>
+                    <input
+                      type="checkbox"
+                      checked={todo.done}
+                      onChange={() =>
+                        dispatch({ type: "todo/toggle", payload: todo.id })
+                      }
+                    />
+                    <span>{todo.text}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      };
+
+      const App = () => (
+        <div className="grid">
+          <CounterCard />
+          <TodoCard />
+        </div>
+      );
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(
+        <Provider store={store}>
+          <App />
+        </Provider>
+      );
+    </script>
+  </body>
 </html>
