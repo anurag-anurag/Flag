@@ -1,104 +1,164 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root {
+  color-scheme: light;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  background-color: #f5f6fb;
+  color: #1b1f2a;
 }
 
-.flag{
-    
-    margin: 30px auto;
-    position: relative;
-    height: 210px;
-    width: 300px;
-    box-shadow: 4PX 5px 6px 0px rgba(0,0,0,0.4);
-    animation: wave 7s infinite;
-    transform-origin: 0 250px;
-
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@keyframes wave{
-    0%{
-        transform: rotateY(25deg);
-    }
-    20%{
-        transform: rotateY(0);
-    }
-    40%{
-        transform: rotateY(-25deg);
-    }
-    60%{
-        transform: rotateY(16deg);
-    }
-    80%{
-        transform: rotateY(25deg);
-    }
-    100%{
-        transform: rotateY(25deg);
-    }
+body {
+  min-height: 100vh;
 }
 
-.flag::before{
-    content: "";
-    position: absolute;
-    left: -7PX;
-    height: 500px;
-    width: 9px;
-    background-color: #442222;
-    border-radius: 3PX;
-    box-shadow: -3PX 3px 8px 0px rgba(0,0,0,0.4);
+.page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 24px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
-.ashok{
-    width: 70px;
-    height: 70px;
-    animation: spin 1s linear infinite;
-    transition: all 0.5  ;
+.hero {
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-@keyframes spin{
-    0.5%{
-        transform: rotate(360);
-    }
-    100%{
-        transform: rotate(360deg);
-    }
+.eyebrow {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #5f6bff;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
 }
 
-.color{
-    height: 70px;
-    width: 300px;
-    display: flex;
-    justify-content: center;
+.hero h1 {
+  font-size: 2.2rem;
 }
 
-.white{
-    background-color: white;
-
+.subtitle {
+  font-size: 1rem;
+  color: #4b5563;
+  max-width: 70ch;
 }
 
-.green{
-    background-color: green;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
 }
 
-.saffron{
-    background-color: #ff9933;
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.text{
-    width: 200px;
-    height: 100px;
-    position: relative;
-    left: 530px;
-    top: 30px;
-    justify-content: center;
-    animation: zoom 2s infinite;
+.card h2 {
+  font-size: 1.4rem;
 }
 
-@keyframes zoom{
-    0%{
-        transform: scale(0.1);
-    }
-    100%{
-        transform: scale(1);
-    }
+.card-description {
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.counter-value {
+  font-size: 2.6rem;
+  font-weight: 700;
+  background: #eef2ff;
+  color: #3730a3;
+  border-radius: 12px;
+  padding: 12px 20px;
+  text-align: center;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+button {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: #4f46e5;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.25);
+}
+
+button.ghost {
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.todo-form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.todo-form input {
+  flex: 1;
+  min-width: 180px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+}
+
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.todo-list label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.todo-list label.done span {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.footer {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 32px 18px 48px;
+  }
+
+  .hero h1 {
+    font-size: 1.8rem;
+  }
 }
